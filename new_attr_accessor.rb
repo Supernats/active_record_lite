@@ -1,4 +1,4 @@
-class Class
+class Object
 
   def new_attr_accessor(*attributes)
     attributes.each do |attribute|
