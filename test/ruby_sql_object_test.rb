@@ -30,3 +30,7 @@ c.save
 h = Human.find(1)
 # just run an UPDATE; no values changed, so shouldnt hurt the db
 h.save
+
+puts "NOW MY TEST"
+
+p Human.find(1).update

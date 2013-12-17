@@ -6,4 +6,4 @@ class MyMassObject < MassObject
 end
 
 obj = MyMassObject.new(:x => :x_val, :y => :y_val)
-p obj
+p obj.class.attributes
