@@ -5,6 +5,7 @@ require_relative './searchable'
 require 'active_support/inflector'
 
 class SQLObject < MassObject
+  extend Searchable
   # sets the table_name
   def self.set_table_name(table_name)
     @table_name = table_name.underscore
@@ -19,7 +20,7 @@ class SQLObject < MassObject
   # converts resulting array of hashes to an array of objects by calling ::new
   # for each row in the result. (might want to call #to_sym on keys)
   def self.all
-    rows = DBConnection.execute(<<-SQL,)
+    rows = DBConnection.execute(<<-SQL)
       SELECT
         "#{table_name}".*
       FROM
@@ -71,11 +72,6 @@ class SQLObject < MassObject
 
   # executes query that updates the row in the db corresponding to this instance
   # of the class. use "#{attr_name} = ?" and join with ', ' for set string.
-
-  def insert
-    col_names = self.class.attributes.join(", ")
-    question_marks = (["?"] * self.attributes.count).join(", ")
-  end
 
   def update
     set_line = self.class.attributes.map do |attr_name|

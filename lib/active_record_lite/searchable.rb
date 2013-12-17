@@ -10,14 +10,15 @@ module Searchable
       "#{key} = ?"
     end
     where_line = where_line.join(" AND ")
+    p where_line
     results = DBConnection.execute(<<-SQL, params.values)
     SELECT
-      "#{self.class.table_name}".*
+      "#{self.table_name}".*
     FROM
-      "#{self.class.table_name}"
+      "#{self.table_name}"
     WHERE
-      "#{where_line}"
+      #{where_line}
     SQL
-    self.class.parse_all(results)
+    self.parse_all(results)
   end
 end
