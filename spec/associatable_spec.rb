@@ -4,12 +4,13 @@ describe "associatable" do
   before(:all) do
     # https://tomafro.net/2010/01/tip-relative-paths-with-file-expand-path
     cats_db_file_name =
-      File.expand_path(File.join(File.dirname(__FILE__), "../test/cats.db"))
+      File.expand_path(File.join(File.dirname(__FILE__), "../spec/cats.db"))
     DBConnection.open(cats_db_file_name)
 
     class Cat < SQLObject
       set_table_name("cats")
       my_attr_accessible(:id, :name, :owner_id)
+      my_attr_accessor(:id, :name, :owner_id)
 
       belongs_to :human, :class_name => "Human", :primary_key => :id, :foreign_key => :owner_id
       has_one_through :house, :human, :house
@@ -18,6 +19,7 @@ describe "associatable" do
     class Human < SQLObject
       set_table_name("humans")
       my_attr_accessible(:id, :fname, :lname, :house_id)
+      my_attr_accessor(:id, :fname, :lname, :house_id)
 
       has_many :cats, :foreign_key => :owner_id
       belongs_to :house
@@ -26,6 +28,7 @@ describe "associatable" do
     class House < SQLObject
       set_table_name("houses")
       my_attr_accessible(:id, :address, :house_id)
+      my_attr_accessor(:id, :address, :house_id)
     end
   end
 
@@ -53,7 +56,7 @@ describe "associatable" do
       human.cats.first.should be_instance_of(Cat)
     end
   end
-  
+
   describe "#has_one_through" do
     it "adds association as method" do
       cat.methods.should include(:house)
@@ -63,5 +66,5 @@ describe "associatable" do
       cat.house.should be_instance_of(House)
     end
   end
-  
+
 end
